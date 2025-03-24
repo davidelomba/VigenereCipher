@@ -102,7 +102,12 @@ def distance_gram(s, gram):
 
 # funzione che calcola il MCD delle distanze
 def mcd_dist(dist):
+    # controlla se la list è vuota
+    if not dist:
+        print("Errore: Nessuna distanza trovata. Forse il testo è troppo corto o non contiene ripetizioni.")
+        return None
     return reduce(math.gcd, dist)
+
 
 # funzione che costruisce la matrice (m,n') con n' = n/m se m divide n altriment n' = int(n/m) + 1
 def build_matrix(s, m):
@@ -205,28 +210,31 @@ if __name__ == '__main__':
     dist = distance_gram(input_str, gram)
     # calcolo il MCD tra le distanze
     m = mcd_dist(dist)
-    print("Lunghezza chiave ipotizzata (MCD): ", m)
-    print()
-    # converto in numeri il ciphertext
-    s = letter_to_number(input_str)
-    # print(s)
-    # costruisco la matrice in base alla lunghezza della chiave ipotizzata
-    matrix = build_matrix(s, m)
-    # calcolo l'indice di coincidenza di ogni riga per verificare la correttezza della lunghezza della chiave
-    ic = matrix_ic(matrix)
-    # calcolo la chiave
-    max_g, max_m = key_calc(matrix)
+    if m is None:
+        print("Errore: Non è stato possibile determinare la lunghezza della chiave. Riprova con un testo più lungo o contenente più ripetizioni.")
+    else:
+        print("Lunghezza chiave ipotizzata (MCD): ", m)
+        print()
+        # converto in numeri il ciphertext
+        s = letter_to_number(input_str)
+        # print(s)
+        # costruisco la matrice in base alla lunghezza della chiave ipotizzata
+        matrix = build_matrix(s, m)
+        # calcolo l'indice di coincidenza di ogni riga per verificare la correttezza della lunghezza della chiave
+        ic = matrix_ic(matrix)
+        # calcolo la chiave
+        max_g, max_m = key_calc(matrix)
 
-    print("Chiave: ", max_g)
+        print("Chiave: ", max_g)
 
-    print()
+        print()
 
-    print(max_m)
+        print(max_m)
 
-    print()
+        print()
 
-    # decifro il ciphertext
-    result = decrypt(matrix, max_g)
+        # decifro il ciphertext
+        result = decrypt(matrix, max_g)
 
-    # stampo il messaggio cifrato dopo aver convertito i numeri in lettere
-    matrix_to_string(result)
+        # stampo il messaggio cifrato dopo aver convertito i numeri in lettere
+        matrix_to_string(result)
